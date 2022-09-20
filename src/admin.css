@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
+
+body {
+    position: absolute;
+    margin: 0px; padding: 0px;
+    height: 100vh; width: 100vw;
+}
+#root {
+    height: 100%; width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center; align-items: top;
+}
+
+#form, form {
+    position: relative;
+    height: min-content; width: 500px;
+    border: solid 2px gray;
+    border-radius: 5px;
+    margin: 30px;
+    padding: 20px; padding-top: 0px; padding-bottom: 0px;
+}
+
+.fele { 
+    position: relative;
+    height: auto; width: calc(100% - 20px);
+    background-color: rgb(225, 241, 255);
+    margin-top: 20px; margin-bottom: 20px;
+    display: flex; justify-content: center; align-items: center;
+    flex-direction: column;
+    padding: 10px;
+}
+
+#eleName, .inp {
+    position: relative;
+    /* border: 1px solid gray; */
+    border: none;
+    border-bottom: 1px solid rgb(107, 166, 255);
+    /* border: none; */
+    outline: none; height: 40px; width: 60%;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 20px;
+}
+
+#eleName {
+    margin-right: 10px;
+}
+
+#add, #remove {
+    position: absolute;
+    right: -15px; top: -15px;
+    height: 40px; width: 40px;
+    border-radius: 20px;
+    background-color: transparent;
+    background-image: url("./assets/add_sym.webp");
+    background-position: center; background-size: cover;
+    cursor: pointer;
+}
+
+#remove {
+    background-image: url("./assets/rem_sym.jpg");
+    background-size: 140%;
+}
+
+.textBox {
+    position: relative;
+    left: 0px;
+    font-size: 20px;
+    width: 100%;
+    margin: 10px;
+    text-align: left;
+    font-family: 'Work Sans', sans-serif;
+}
+
+#adder {
+    position: relative;
+    height: auto; width: calc(100% - 20px);
+    background-color: aliceblue;
+    margin-top: 20px; margin-bottom: 20px;
+    display: flex; justify-content: center; align-items: center;
+    flex-direction: row;
+    padding: 10px;
+}
+
+#adder label {
+    margin-right: 10px;
+    font-size: 17px;
+    font-family: 'Work Sans', sans-serif;
+}
+
+#submitBtn, #addOpt {
+    background-color: rgb(107, 166, 255);
+    margin-bottom: 10px;
+    padding-top: 10px; padding-bottom: 10px;
+    text-align: center;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 20px;
+    border-radius: 10px;
+    color: white; cursor: pointer;
+    border: none; width: 100%;
+}
+
+#types {
+    outline: none;
+    border: none;
+    height: 40px; width: 60px;
+    font-size: 15px;
+}
+
+#main {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: min-content;
+}
+
+#options {
+    position: fixed;
+    display: none;
+    height: auto; width: 500px;
+    padding: 20px;
+    background-color: rgb(195, 206, 255);
+    border-radius: 10px;
+    margin: 50px;
+    flex-direction: column;
+    top: 30vh;
+}
+
+#opts {
+    position: relative;
+    width: calc(100% - 20px);
+    height: auto; min-height: 100px;
+    border-radius: 10px; outline: none;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 20px;
+}
+
+.optManager {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+}
+
+.radioLabel {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 20px;
+    padding-top: 8px;
+    padding-left: 5px;
+    max-height: 50px;
+}
+
+.radioInp {
+    position: relative;
+    width: 20px;
+}
+
+.options {
+    position: relative;
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}

@@ -34,6 +34,7 @@ class Form extends React.Component {
             comps: {elements: {}},
             status: "Loading",
             options: [],
+            eID: 1
         };
 
         axios
@@ -73,13 +74,7 @@ class Form extends React.Component {
         }
 
         const type = document.getElementById("types");
-        let inpType = type.options[type.selectedIndex].value.toLowerCase(), inpName;
-
-        if (inpType == "file") {
-            inpName = "files";
-        } else {
-            inpName = val.replace(" ", "_");
-        }
+        let inpType = type.options[type.selectedIndex].value.toLowerCase(), inpName = val.replace(" ", "_");
 
         // var temp = this.state.elements.slice();
         // temp.push([val.toUpperCase(), inpType]);
@@ -87,8 +82,9 @@ class Form extends React.Component {
         document.getElementById("eleName").value = "";
         var obj = this.state.comps;
 
-        obj.elements[val.toUpperCase()] = {"type": inpType, "name": inpName, "options": this.state.options, "isRequired": isRequired};
+        obj.elements[val.toUpperCase()] = {"eID": this.state.eID, "type": inpType, "name": inpName, "options": this.state.options, "isRequired": isRequired};
         this.setState({comps: obj, options: []});
+        this.setState({eID: this.state.eID + 1});
         document.getElementById("types").selectedIndex = 0;
         document.getElementById("required").checked = false;
     }

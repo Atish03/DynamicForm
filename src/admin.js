@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 const axios = require("axios");
 import "./admin.css";
-
+import { Routes, Route, useParams } from 'react-router-dom'
 
 class FormElement extends React.Component {
     ele = this.props.info;
@@ -34,15 +34,13 @@ class Form extends React.Component {
             comps: {elements: {}},
             status: "Loading",
             options: [],
-            eID: 1
+            eID: 1,
         };
 
         axios
-            .get("/event/formData")
+            .get(`/event/${this.props.eventID}/formData`)
             .then((resp) => {
-                console.log(resp.data);
-                this.setState({comps: resp.data.comps});
-                this.setState({status: "Done"});
+                this.setState({comps: resp.data.comps, status: "Done"});
             })
             .catch((error) => {
                 console.log(error);
@@ -58,7 +56,7 @@ class Form extends React.Component {
     handleSubmit() {
         const data = {comps: this.state.comps};
         axios
-            .post("/event/submit", data)
+            .post(`/event/${this.props.eventID}/submit`, data)
             .then((resp) => {
                 console.log(resp)
             })
@@ -153,12 +151,13 @@ class Form extends React.Component {
     }
 }
 
-class Box extends React.Component {
+class Maker extends React.Component {
     render() {
+        console.log(this.props);
         return(
-            < Form />
+            < Form eventID={this.props.eventID} />
         )
     }
 }
 
-export default Box;
+export default Maker;

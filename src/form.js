@@ -52,39 +52,20 @@ class Form extends React.Component {
         };
 
         axios
-            .get("/event/formData")
+            .get(`/event/${this.props.eventID}/formData`)
             .then((resp) => {
-                console.log(resp.data);
-                this.setState({comps: resp.data.comps});
-                this.setState({status: "Done"});
+                this.setState({comps: resp.data.comps, status: "Done"});
             })
             .catch((error) => {
                 console.log(error);
             })
-
-        // this.handleSubmit = this.handleSubmit.bind(this);
     }
-
-    // handleSubmit() {
-    //     const fields = Object.keys(this.state.comps.elements);
-    //     var data = {}
-
-    //     for(var field of fields) {
-    //         data[field] = document.getElementById(field.replace(" ", "_")).value;
-    //     }
-
-    //     // console.log(data);
-    //     axios
-    //         .post("/submitForm", data)
-    //         .then((resp) => {
-    //             console.log(resp)
-    //         })
-    // }
 
     render() {
         if (this.state.status == "Done") {
+            const subLink = `/event/${this.props.eventID}/submitForm`;
             return(
-                <form method="post" action="/event/submitForm" enctype="multipart/form-data">
+                <form method="post" action={subLink} enctype="multipart/form-data">
                     {
                         Object.keys(this.state.comps.elements).map((ele) =>
                             <div className="fele" key={ele}>
@@ -107,7 +88,7 @@ class Form extends React.Component {
 class Box extends React.Component {
     render() {
         return(
-            < Form />
+            < Form eventID={this.props.eventID} />
         )
     }
 }

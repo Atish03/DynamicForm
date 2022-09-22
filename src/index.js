@@ -1,22 +1,37 @@
 import React from "react";
 import ReactDOM from "react-dom/client"
-import Form from "./admin";
+import Maker from "./admin";
 import Box from "./form";
 import Viewer from "./viewer";
-import {BrowserRouter as Router, Route, Link, Routes} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Link, Routes, useParams} from 'react-router-dom';
 
-class Main extends React.Component {
-    render() {
-        return (
-            < Router>
-            <Routes>
-                <Route path="/event" element={ < Form /> } ></Route>
-                <Route path="/event/apply" element={ < Box /> }></Route>
-                <Route path="/event/view" element={ < Viewer /> }></Route>
-            </Routes>
-            </Router>
-        )
-    }
+function Render() {
+    const { id } = useParams();
+    return < Maker eventID={id} />;
+}
+
+function StudRender() {
+    const { id } = useParams();
+    return < Box eventID={id} />;
+}
+
+function ViewRender() {
+    const { id } = useParams();
+    return < Viewer eventID={id} />;
+}
+
+function Main() {
+    return (
+        < Router>
+        <Routes>
+            <Route path="/event">
+                <Route path=":id/makeForm" element={ < Render /> } />
+                <Route path=":id/apply" element={ < StudRender /> } />
+                <Route path=":id/view" element={ < ViewRender /> } />
+            </Route>
+        </Routes>
+        </Router>
+    )
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

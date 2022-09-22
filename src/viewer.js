@@ -46,7 +46,7 @@ class Viewer extends React.Component {
             ind: 0,
         }
 
-        axios.get("/event/data")
+        axios.get(`/event/${this.props.eventID}/data`)
             .then((resp) => {
                 this.setState({allData: resp.data, nApplicants: resp.data["applicants"].length});
             })

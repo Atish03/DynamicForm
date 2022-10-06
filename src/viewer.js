@@ -56,6 +56,8 @@ class Viewer extends React.Component {
 
         this.handleNext = this.handleNext.bind(this);
         this.handlePrev = this.handlePrev.bind(this);
+        this.handleAccept = this.handleAccept.bind(this);
+        this.handleReject = this.handleReject.bind(this);
     }
 
     handleNext() {
@@ -80,6 +82,20 @@ class Viewer extends React.Component {
         }
     }
 
+    handleAccept() {
+        axios.post(`/event/${this.props.eventID}/updatestatus`, {status: "accepted", studId: this.state.ind})
+        .then((resp) => {
+            console.log(resp);
+        })
+    }
+
+    handleReject() {
+        axios.post(`/event/${this.props.eventID}/updatestatus`, {status: "rejected", studId: this.state.ind})
+        .then((resp) => {
+            console.log(resp);
+        })
+    }
+
     render() {
         if (this.state.allData) {
             var applicant = < Applicant num={this.state.ind} allData={this.state.allData} />;
@@ -88,8 +104,8 @@ class Viewer extends React.Component {
                 <div id="main">
                     {applicant}
                     <div className="choices">
-                        <div className="opt" id="accept">ACCEPT</div>
-                        <div className="opt" id="reject">REJECT</div>
+                        <div className="opt" id="accept" onClick={this.handleAccept}>ACCEPT</div>
+                        <div className="opt" id="reject" onClick={this.handleReject}>REJECT</div>
                         <div className="opt" id="next" onClick={this.handleNext}>NEXT</div>
                         <div className="opt" id="prev" onClick={this.handlePrev}>PREV</div>
                     </div>

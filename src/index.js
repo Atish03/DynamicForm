@@ -1,8 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client"
-import Maker from "./admin";
+import Maker from "./makeForm";
 import Box from "./form";
 import Viewer from "./viewer";
+import EventForm from "./createEvent";
+import Event from "./events";
 import {BrowserRouter as Router, Route, Link, Routes, useParams} from 'react-router-dom';
 
 function Render() {
@@ -24,11 +26,13 @@ function Main() {
     return (
         < Router>
         <Routes>
+            <Route path="/event" element={ < Event /> } />
             <Route path="/event">
                 <Route path=":id/makeForm" element={ < Render /> } />
                 <Route path=":id/apply" element={ < StudRender /> } />
                 <Route path=":id/view" element={ < ViewRender /> } />
             </Route>
+            <Route path="/createEvent" element={ < EventForm /> }></Route>
         </Routes>
         </Router>
     )

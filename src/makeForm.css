@@ -12,7 +12,7 @@ body {
     justify-content: center; align-items: top;
 }
 
-#form, form {
+#form, #submitForm {
     position: relative;
     height: min-content; width: 500px;
     border: solid 2px gray;

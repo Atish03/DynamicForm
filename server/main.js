@@ -28,20 +28,22 @@ app.get('/event/:id/makeForm', (req, res) => {
 
 //ADMIN
 app.post("/event/:id/submit", (req, res) => {
-    if (!req.body) {
-        req.body = {};
-    }
-    req.body["Event"] = req.params.id;
-    console.log(req.body);
-    collection.findOneAndReplace({ "Event": req.params.id }, req.body).then((resp) => {
-        res.send(resp);
+    collection.findOne({ "Event": req.params.id }).then((resp) => {
+        resp["comps"] = req.body.comps;
+        collection.findOneAndReplace({ "Event": req.params.id }, resp).then((resp) => {
+            res.send(resp);
+        })
     })
 })
 
 app.get("/event/:id/formData", (req, res) => {
+
     collection.findOne({ "Event": req.params.id }).then((resp) => {
         resp["eventID"] = req.params.id;
         res.send(resp);
+    }).catch((error) => {
+        console.error(error);
+        res.send("err404")
     })
 })
 
@@ -63,6 +65,7 @@ app.post("/event/:id/submitForm", upload.any(), (req, res) => {
             data["applicants"] = []
         }
         req.body["files"] = files;
+        req.body["status"] = "pending";
         data["applicants"].push(req.body);
         collection.findOneAndReplace({ "Event": req.params.id }, data).then((resp) => {
             res.send(resp);
@@ -80,6 +83,51 @@ app.get("/event/:id/data", (req, res) => {
     collection.findOne({ "Event": req.params.id }).then((resp) => {
         res.json(resp);
     })
+})
+
+//ADMIN
+app.get('/createEvent', (req, res) => {
+    res.sendFile("index.html", {root: path.join(__dirname, "../build/")});
+})
+
+//ADMIN
+app.post("/createEvent", (req, res) => {
+    collection.countDocuments({ "_id": { "$exists": true } }).then((resp) => {
+        req.body["Event"] = (resp + 1).toString();
+        req.body["isOngoing"] = false;
+        req.body["comps"] = {"elements": {}};
+        collection.insertOne(req.body).then(() => {
+            res.send("Done");
+        })
+    })
+})
+
+//ADMIN
+app.post("/event/:id/updatestatus", (req, res) => {
+    collection.findOne({ "Event": req.params.id }).then((resp) => {
+        resp.applicants[req.body.studId].status = req.body.status;
+        collection.findOneAndReplace({ "Event": req.params.id }, resp).then((resp) => {
+            res.send("Updated");
+        })
+    })
+})
+
+app.get("/event", (req, res) => {
+    res.sendFile("index.html", {root: path.join(__dirname, "../build/")});
+})
+
+app.get("/allevents", (req, res) => {
+    collection.find({}).toArray((err, result) => {
+        fResult = {};
+        for(var i = 0; i < result.length; i++) {
+            temp = {}
+            temp["Name"] = result[i].eventName;
+            temp["Organizer"] = result[i].eventOrganizer;
+            temp["EventID"] = result[i].Event;
+            fResult[i] = temp;
+        }
+        res.json(fResult);
+    });
 })
 
 app.listen(5000, () => {

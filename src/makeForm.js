@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 const axios = require("axios");
-import "./admin.css";
+import "./makeForm.css";
 import { Routes, Route, useParams } from 'react-router-dom'
 
 class FormElement extends React.Component {
@@ -40,7 +40,11 @@ class Form extends React.Component {
         axios
             .get(`/event/${this.props.eventID}/formData`)
             .then((resp) => {
-                this.setState({comps: resp.data.comps, status: "Done"});
+                if (resp.data == "err404") {
+                    this.setState({status: "Event not found..."});
+                } else {
+                    this.setState({comps: resp.data.comps, status: "Done"});
+                }
             })
             .catch((error) => {
                 console.log(error);
@@ -145,7 +149,7 @@ class Form extends React.Component {
             )
         } else {
             return(
-                <div>Loading....</div>
+                <div>{this.state.status}</div>
             )
         }
     }

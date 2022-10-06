@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 const axios = require("axios");
-import "./admin.css";
+import "./makeForm.css";
 
 
 class FormElement extends React.Component {
@@ -65,7 +65,7 @@ class Form extends React.Component {
         if (this.state.status == "Done") {
             const subLink = `/event/${this.props.eventID}/submitForm`;
             return(
-                <form method="post" action={subLink} enctype="multipart/form-data">
+                <form id="submitForm" method="post" action={subLink} enctype="multipart/form-data">
                     {
                         Object.keys(this.state.comps.elements).map((ele) =>
                             <div className="fele" key={ele}>

@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300&family=Open+Sans:wght@300&display=swap');
+
+#eventForm {
+    padding: 15px;
+    margin: 20px;
+    background-color: white;
+    height: max-content; width: 500px;
+}
+
+.textInp {
+    outline: none;
+    width: calc(100% - 20px);
+    height: 40px;
+    border: 1px solid grey;
+    background-color: transparent;
+    border-radius: 10px;
+    font-size: 18px;
+    padding-left: 10px; padding-right: 10px;
+    padding-top: 10px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.placeholder {
+    position: relative;
+    top: -38px;
+    padding: 5px;
+    left: 15px;
+    pointer-events: none;
+    transition: all 0.2s ease-out;
+    font-family: 'Inter Tight', sans-serif;
+    color: rgb(78, 78, 78);
+    font-size: 18px;
+}
+
+.textField input:focus {
+    border-color: rgb(98, 140, 255);
+}
+
+.textField input:focus ~ .placeholder, .textField input:not(:placeholder-shown) ~ .placeholder {
+    top: -62px;
+    left: 20px;
+    background-color: white;
+    font-size: 15px;
+    color: rgb(98, 140, 255);
+}
+
+.textField input:not(:focus) ~ .placeholder {
+    color: rgb(78, 78, 78);
+}
+
+.textField {
+    position: relative;
+    height: 40px;
+    margin: 40px;
+}
+
+#eventSubmit {
+    height: 50px; width: 100px;
+    font-size: 18px;
+    font-family: 'Inter Tight', sans-serif;
+    border-radius: 10px;
+    border: none;
+    color: white; background-color: rgb(119, 154, 253);
+    cursor: pointer;
+    margin-left: 72%;
+}
+
+#eventSubmit:hover {
+    background-color: rgb(91, 134, 253);
+}

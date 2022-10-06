@@ -1,0 +1,12 @@
+.event {
+    padding: 10px;
+    margin: 10px;
+}
+
+.eventName {
+    padding: 10px;
+    text-align: left;
+    font-size: 20px;
+    color: white;
+    background-color: rgb(94, 94, 255);
+}

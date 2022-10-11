@@ -62,7 +62,7 @@ class Form extends React.Component {
         axios
             .post(`/event/${this.props.eventID}/submit`, data)
             .then((resp) => {
-                console.log(resp)
+                window.location.href = "/allevents";
             })
     }
 

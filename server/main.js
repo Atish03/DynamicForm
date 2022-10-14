@@ -12,6 +12,7 @@ const uri = process.env.URI;
 const client = new MongoClient(uri);
 const database = client.db("NVCTI");
 const collection = database.collection("event");
+const mentorCollection = database.collection("mentors");
 
 const app = express();
 
@@ -36,7 +37,7 @@ app.get('/event/:id/makeForm', (req, res) => {
 app.post("/event/:id/submit", (req, res) => {
     if (user == "admin") {
         collection.findOne({ "Event": req.params.id }).then((resp) => {
-            resp["comps"] = req.body.comps;
+            resp["questions"] = req.body.questions;
             collection.findOneAndReplace({ "Event": req.params.id }, resp).then((resp) => {
                 res.redirect("/allevents");
             })
@@ -61,21 +62,34 @@ app.get("/event/:id/apply", (req, res) => {
 })
 
 app.post("/event/:id/submitForm", upload.any(), (req, res) => {
+    var eFlag = 0;
+
+    for (var key of Object.keys(req.body)) {
+        if (key != "files" && req.body[key].trim() == "") {
+            eFlag = 1;
+            return res.send("error");
+        }
+    }
+
     let data = {}
-    let files = {}
     
-    for (var f of req.files) {
-        files[f["fieldname"]] = f["filename"];
+    if (req.files.length != 0) {
+        let files = {}
+        for (var f of req.files) {
+            files[f["fieldname"]] = f["filename"];
+        }
+        req.body["files"] = files;
     }
 
     collection.findOne({ "Event": req.params.id }).then((resp) => {
         data = resp;
+        var eFlag = 0;
         if (!data["applicants"]) {
             data["applicants"] = []
         }
-        req.body["files"] = files;
         req.body["status"] = "pending";
         data["applicants"].push(req.body);
+
         collection.findOneAndReplace({ "Event": req.params.id }, data).then((resp) => {
             res.redirect("/allevents");
         })
@@ -172,22 +186,34 @@ function makeid(length) {
 //ADMIN
 app.post("/sendmentor", (req, res) => {
     const mentorMail = req.body.emailID;
-    const applicants = req.applicants;
-    // Add the mentorID, applicants to a document in the database.
+    const applicants = req.body.applicants;
     const mentorID = Date.now();
     const password = makeid(16);
-    console.log(mentorMail, mentorID, password);
+    const data = {id: mentorID.toString(), mail: mentorMail, applicants: applicants}
+
+    mentorCollection.insertOne(data);
+
+    res.json(data);
 })
 
 //MENTOR
-app.get("/mentor/view", (req, res) => {
-    const mentorID = req.id;
-    // Find the entry with mentorID and send the data as json.
+app.get("/mentor/:id/view", (req, res) => {
+    const mentorID = req.params.id;
+    mentorCollection.findOne({ "id": mentorID }).then((resp) => {
+        res.json(resp);
+    })
 })
 
 //MENTOR
-app.post("/mentor/update", (req, res) => {
-    //update status in the DB
+app.post("/mentor/:id/update", (req, res) => {
+    const applicantID = req.body.applicantID;
+    
+    mentorCollection.findOne({ "id": req.params.id }).then((resp) => {
+        resp.applicants[applicantID].status = req.body.status;
+        mentorCollection.findOneAndReplace({ "id": req.params.id }, resp).then((resp) => {
+            res.send(resp);
+        })
+    })
 })
 
 app.listen(5000, () => {

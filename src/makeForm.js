@@ -10,13 +10,13 @@ class FormElement extends React.Component {
     render() {
         if (this.ele["type"] != "radio") {
             return(
-                <input className="inp" type={this.ele["type"]} id={this.eleName.replace(" ", "_")} name={this.ele["name"]} />
+                <input className="inp" type={this.ele["type"]} id={this.eleName.replace(" ", "_")} name={this.ele["question"]} />
             )
         } else {
-            const optList = this.ele["options"];
+            const optList = this.ele["option"];
             const opt = optList.map((opts) =>
                 <div className="optManager">
-                    <input className="inp radioInp" type="radio" id={opts} value={opts} name={this.ele["name"]} />
+                    <input className="inp radioInp" type="radio" id={opts} value={opts} name={this.ele["question"]} />
                     <label className="radioLabel" htmlFor={opts}>{opts}</label>
                 </div>
             );
@@ -31,7 +31,7 @@ class Form extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            comps: {elements: {}},
+            questions: [],
             status: "Loading",
             options: [],
             eID: 1,
@@ -43,7 +43,7 @@ class Form extends React.Component {
                 if (resp.data == "err404") {
                     this.setState({status: "Event not found..."});
                 } else {
-                    this.setState({comps: resp.data.comps, status: "Done"});
+                    this.setState({questions: resp.data.questions, status: "Done"});
                 }
             })
             .catch((error) => {
@@ -58,7 +58,7 @@ class Form extends React.Component {
     }
 
     handleSubmit() {
-        const data = {comps: this.state.comps};
+        const data = {questions: this.state.questions};
         axios
             .post(`/event/${this.props.eventID}/submit`, data)
             .then((resp) => {
@@ -69,6 +69,7 @@ class Form extends React.Component {
     handleAdd() {
         const val = document.getElementById("eleName").value;
         const isRequired = document.getElementById("required").checked;
+        const questions = this.state.questions;
 
         if (val == "") {
             alert("Please enter the field");
@@ -78,23 +79,20 @@ class Form extends React.Component {
         const type = document.getElementById("types");
         let inpType = type.options[type.selectedIndex].value.toLowerCase(), inpName = val.replace(" ", "_");
 
-        // var temp = this.state.elements.slice();
-        // temp.push([val.toUpperCase(), inpType]);
-        // this.setState({elements: temp});
         document.getElementById("eleName").value = "";
         var obj = this.state.comps;
 
-        obj.elements[val.toUpperCase()] = {"eID": this.state.eID, "type": inpType, "name": inpName, "options": this.state.options, "isRequired": isRequired};
-        this.setState({comps: obj, options: []});
+        questions.push({"type": inpType, "question": inpName, "option": this.state.options, "isRequired": isRequired});
+        this.setState({questions: questions});
         this.setState({eID: this.state.eID + 1});
         document.getElementById("types").selectedIndex = 0;
         document.getElementById("required").checked = false;
     }
 
     handleRemove(event, element) {
-        var obj = this.state.comps;
-        delete obj.elements[element];
-        this.setState({comps: obj});
+        var obj = this.state.questions;
+        obj = obj.splice(element, 1)
+        this.setState({questions: obj});
     }
 
     optClick() {
@@ -120,10 +118,10 @@ class Form extends React.Component {
                 <div id="main">
                     <div id="form">
                         {
-                            Object.keys(this.state.comps.elements).map((ele) =>
+                            Object.keys(this.state.questions).map((ele) =>
                             <div className="fele" key={ele}>
-                                <div className="textBox">{ele + " :"}</div>
-                                < FormElement info={this.state.comps.elements[ele]} eleName={ele} />
+                                <div className="textBox">{this.state.questions[ele].question + " :"}</div>
+                                < FormElement info={this.state.questions[ele]} eleName={this.state.questions[ele].question} />
                                 <div id="remove" onClick={event => this.handleRemove(event, ele)}></div>
                             </div>
                             )
